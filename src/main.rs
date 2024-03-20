@@ -23,14 +23,14 @@ fn main() {
     match &cli.command {
         Commands::Encrypt { path, password } => {
             println!("'scrmbl encrypt' was used, password is: {:?}, path is: {:?}", password, path);
-            let lines = read_file_lines_into_vec(path, password);
+            let lines = read_file_lines_into_vec(path);
             let encrypted_lines = cypher_str_vector(lines, password);
             let str_path = path.clone().into_os_string().into_string().unwrap();
             write_vec_to_file(str_path.as_str(), encrypted_lines);
         }
         Commands::Decrypt { path, password } => {
             println!("'scrmbl decrypt' was used, password is: {:?}, path is: {:?}", password, path);
-            let lines = read_file_lines_into_vec(path, password);
+            let lines = read_file_lines_into_vec(path);
             let decrypted_lines = decypher_str_vector(lines, password);
             let str_path = path.clone().into_os_string().into_string().unwrap();
             write_vec_to_file(str_path.as_str(), decrypted_lines);
@@ -38,8 +38,9 @@ fn main() {
     }
 }
 
-fn read_file_lines_into_vec(path_buf: &PathBuf, password: &str) -> Vec<String> {
+fn read_file_lines_into_vec(path_buf: &PathBuf) -> Vec<String> {
     let content = std::fs::read_to_string(path_buf).expect("could not read file");
+    print!("{}", content);
     let mut lines: Vec<String> = vec!();
     for line in content.lines() {
         lines.push(line.to_string());
@@ -71,6 +72,6 @@ fn decrypt_str(string: &str, password: &str) -> String {
 fn write_vec_to_file(path: &str, content: Vec<String>) {
     let file = File::create(path).expect("unable to create file");
     let mut file = BufWriter::new(file);
-    content.into_iter().for_each(|s| write!(file, "{}", s).expect("unable to write"));
+    content.into_iter().for_each(|s| writeln!(file, "{}", s).expect("unable to write"));
     file.flush().unwrap();
 }
