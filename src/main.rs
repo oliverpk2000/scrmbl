@@ -23,13 +23,13 @@ fn main() {
     match &cli.command {
         Commands::Encrypt { path, password } => {
             let lines = io::read_file_lines_into_vec(path);
-            let encrypted_lines = encryption::cypher_str_vector(lines, password);
+            let encrypted_lines = encryption::encode_str_vector(lines, password);
             let str_path = path.clone().into_os_string().into_string().unwrap();
             io::write_vec_to_file(str_path.as_str(), encrypted_lines);
         }
         Commands::Decrypt { path, password } => {
             let lines = io::read_file_lines_into_vec(path);
-            let decrypted_lines = encryption::decypher_str_vector(lines, password);
+            let decrypted_lines = encryption::decode_str_vector(lines, password);
             let str_path = path.clone().into_os_string().into_string().unwrap();
             io::write_vec_to_file(str_path.as_str(), decrypted_lines);
         }
