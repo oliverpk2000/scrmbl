@@ -1,3 +1,4 @@
+use colored::Colorize;
 use magic_crypt::{MagicCryptTrait, new_magic_crypt};
 
 pub fn encode_str_vector(str_vec: Vec<String>, password: &str) -> Vec<String> {
@@ -17,5 +18,12 @@ fn encrypt_str(string: &str, password: &str) -> String {
 
 fn decrypt_str(string: &str, password: &str) -> String {
     let key = new_magic_crypt!(password, 256);
-    return key.decrypt_base64_to_string(string).unwrap_or("".into());
+    let result = key.decrypt_base64_to_string(string);
+    return match result {
+        Ok(v) => v,
+        Err(_) => {
+            println!("{}", "invalid password for line -> line not decrypted".red());
+            string.to_string()
+        }
+    }
 }
