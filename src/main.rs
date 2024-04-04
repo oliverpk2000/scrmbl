@@ -3,6 +3,7 @@ mod io;
 
 
 use clap::{Parser, Subcommand};
+use colored::Colorize;
 pub use magic_crypt::{MagicCryptTrait};
 
 #[derive(Parser)]

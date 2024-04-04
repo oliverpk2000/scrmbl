@@ -22,7 +22,7 @@ fn decrypt_str(string: &str, password: &str) -> String {
     return match result {
         Ok(v) => v,
         Err(_) => {
-            println!("{}", "invalid password for line -> line not decrypted".red());
+            eprintln!("{}", "invalid password for line -> line not decrypted".red());
             string.to_string()
         }
     }
